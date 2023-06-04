@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">StackWidget</string>
+    <string name="empty_view_text">빈 view 입니다</string>
+</resources>
