@@ -47,32 +47,21 @@ class StackRemoteViewsFactory implements RemoteViewsFactory
 
 	@Override
 	public RemoteViews getLoadingView() {
-		// �ε��並 ���� ������� �մ�.
-		// null�� �����ϸ� �⺻ �ε��並 �����ش�.
 		return null;
 	}
 
 	@Override
 	public RemoteViews getViewAt(int position) {
-		// position�� �׻� 0���� getCount()-1 �����̴�.
-
-		// remote �並 �����,
-		// position�� ���� ���ڸ� �ִ´�.
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
-        rv.setTextViewText(R.id.widget_item, mWidgetItems.get(position).text);
-
-        // fill-intent�� �����.
-        // �׷� ����. StackWidgetProvider���� ���� pending intent template�� �ִ´�.
+        //rv.setTextViewText(R.id.widget_item, mWidgetItems.get(position).text);
+		rv.setImageViewResource(R.id.widget_item, R.drawable.test);
         Bundle extras = new Bundle();
         extras.putInt(StackWidgetProvider.EXTRA_ITEM, position);
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
-        // �� item�� on-click�� ������ �� �ְ� �����.
+
         rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 
-
-        // �ð��� �����ɸ��� �۾��� ���⿡�� �ϸ� �ȴ�.
-        // �̹���ó���� ���ͳ���� ���� ���� ���⼭ �Ѵ�.
         try {
             System.out.println("Loading view " + position);
             Thread.sleep(500);
@@ -80,13 +69,11 @@ class StackRemoteViewsFactory implements RemoteViewsFactory
             e.printStackTrace();
         }
 
-        // Return the remote views object.
         return rv;
 	}
 
 	@Override
 	public int getViewTypeCount() {
-		
 		return 1;
 	}
 
@@ -95,18 +82,13 @@ class StackRemoteViewsFactory implements RemoteViewsFactory
 		return true;
 	}
 
-	// data set �ʱ�ȭ
+
 	@Override
 	public void onCreate() {
-		// onCreate()���� data source �����̳� cursor�� �����Ѵ�.
-		// �ð��� ���� �ɸ��� �۾��� ���⼭ ���� ����onDataSetChanged()�� getViewAt()���� �Ѵ�. 
-		// ���⿡�� 20���̻� �ɸ��� �Ǹ� ANR�� �߻��� �� �ִ�.
         for (int i = 0; i < mCount ; i++) {
             mWidgetItems.add(new WidgetItem(i + "!"));
         }
 
-        // ��view�� ��� �ߴ��� �����ֱ� ���� 3�� sleep
-        // ��view�� stackWidgetprovier�ȿ��� �����ǰ� �ݵ�� collection view�� sibling�̾�� �Ѵ�.
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -117,17 +99,11 @@ class StackRemoteViewsFactory implements RemoteViewsFactory
 
 	@Override
 	public void onDataSetChanged() {
-		// collection view����
-		// AppWidgetmanager notifyAppWidgetViewdataChanged�� ȣ��Ǹ� ���Ⱑ �ڵ����� �ҷ�����.
-		// �ð��� ���� �ɸ��� �۾��� ���⼭ �� �� �ִ�. (�̹���ó��, ���ͳ���� ������)
-		// ������ ���� �۾��� ���� ������ ����ϰ� �ȴ�.
-		// ���⼭ �ð��� ���� �ɸ��� �۾��� �Ѵٰ� �ϴ��� ������ ���� �ɷ��� ������ �ʴ´�.
 		
 	}
 
 	@Override
 	public void onDestroy() {
-		// Ŀ���� db connection �� �ִٸ� ���⼭ �����ؾ� �Ѵ�.
         mWidgetItems.clear();
 		
 	}
